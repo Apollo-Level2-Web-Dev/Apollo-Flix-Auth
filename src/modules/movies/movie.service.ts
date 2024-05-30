@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TMovie } from "./movie.interface";
 import { Movie } from "./movie.model";
 const createMovie = async (payload: TMovie) => {
-  
-  
   /* 
   Way1: Using business logic here....
 
@@ -18,8 +18,7 @@ const createMovie = async (payload: TMovie) => {
    });
    //const result = await Movie.create(payload);
 */
-
-/* Way3: Using instance method logic here....
+  /* Way3: Using instance method logic here....
 
   
   const result = new Movie(payload);
@@ -30,16 +29,26 @@ const createMovie = async (payload: TMovie) => {
   await result.save(); // database save
 
   return result;
+  */
+
+  const result = new Movie(payload);
+
+  const slug = result.createSlug(payload);
+
+  result.slug = slug;
+  await result.save(); // database save
+
+  return result;
 };
-*/
+
 const getAllMovies = async () => {
   const result = await Movie.find();
   return result;
 };
 
 const getMovieBySlug = async (slug: string) => {
-  const result = await Movie.findOne({ slug: slug });
-  return result;
+  const movie = await Movie.findOne({ slug: slug });
+  return movie;
 };
 
 export const MovieServices = {

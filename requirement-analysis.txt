@@ -1,0 +1,98 @@
+Movie 
+    _id : string;
+    title: string;
+  description: string;
+  releaseDate: Date;
+  genre: string;
+  slug: string;
+  viewCount: number;
+  totalRating: number; /10000
+  avgRating : number; [virtually]
+  isDeleted?: boolean;
+
+//get Movies
+//get Reviews
+
+/api/movies/:slug
+
+
+
+//Task
+/api/movies/:slug/reviews [Get All Reviews Of A specific Movie]
+ - Sort on the basis rating
+ - rating filtering - 5Start filter, 3 Star, 4 Start
+
+//Very important
+/api/movies/:slug/reviews/:id [Delete Single Reviews Of A specific Movie]
+
+
+/api/movies/:slug/reviews/:id [Get Single Reviews Of A specific Movie]
+
+
+/api/movies/:slug/reviews/:id [Put Single Reviews Of A specific Movie]
+
+
+
+
+/api/movies/:slug/reviews/:id
+
+  Review 
+    - movie : MovieId ( Parent referencing)
+    -  email: string;
+    -  rating: number;
+    -  comment: string;
+
+    1 To Many = 1 Movie can have multiple reviews
+
+    //comment1 : Movie ta khubi faltu 
+    // Movie : Inception
+
+     //comment1 : Movie ta khubi joss
+    // Movie : Inception
+
+
+const movieSchema = new Schema<TMovie, TMovieModel, TMovieMethods>({
+  title: {
+    type: String,
+    required: [true, "Title is required"],
+  },
+  description: {
+    type: String,
+    required: [true, "Description is required"],
+  },
+  releaseDate: {
+    type: Date,
+  },
+  genre: {
+    type: String,
+    required: [true, "Genre is required"],
+  },
+  slug: {
+    type: String,
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+  reviews : [{
+    email : ph@!gmail.com,
+    rating : 4,
+    comment : "Movie ta khubi joss"
+  }, {}, {}] // embedding
+
+  reviews : ["237eh7fbnqw", "237eh7fbnqw", "237eh7fbnqw"] // referencing : Child Referencing 
+  actors : ["237eh7fbnqw", "237eh7fbnqw", "237eh7fbnqw"] // referencing : Child Referencing /
+  viewCount: {
+    type: Number,
+    default: 0,
+  },
+  totalRating: {
+    type: Number,
+    default: 0,
+  },
+});
+
+
+
+1 Review -> Movie Total Rating
+
