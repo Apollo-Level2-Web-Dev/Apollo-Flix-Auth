@@ -14,6 +14,7 @@ const movieSchema = new Schema<TMovie, TMovieModel, TMovieMethods>({
   },
   releaseDate: {
     type: Date,
+    required: [true, "Release Date is required"],
   },
   genre: {
     type: String,

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -16,13 +17,9 @@ export const catchAsync = (fn: RequestHandler) => {
     //       });
     //     }
 
-    Promise.resolve(fn(req, res, next)).catch((error) => {
+    Promise.resolve(fn(req, res, next)).catch((error): void => {
       console.log(error);
-      res.status(500).json({
-        success: false,
-        message: "Could not fetch random movie!",
-        error: error,
-      });
+      next(error);
     });
   };
 };

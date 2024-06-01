@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Movie } from "../movies/movie.model";
 import { TReview } from "./review.interface";
