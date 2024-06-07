@@ -41,8 +41,73 @@ const createMovie = async (payload: TMovie) => {
   return result;
 };
 
-const getAllMovies = async () => {
-  const result = await Movie.find();
+const getAllMovies = async (payload: Record<string, unknown>) => {
+  let searchTerm = "";
+
+  if (payload?.searchTerm) {
+    searchTerm = payload.searchTerm as string;
+  }
+
+  const searchAbleFields = ["title", "genre"];
+  // {title: {$regex: searchTerm}}
+  // {genre: {$regex: searchTerm}}
+
+  const searchedMovies = Movie.find({
+    $or: searchAbleFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: "i" },
+    })),
+  });
+
+  // pagination
+  // 1st skip =0
+  //  2nd skip =2*10 - 1*10
+  //  3rd skip =3*10 - 2*10
+  //  skip = (page-1)*limit
+
+  let limit: number = Number(payload?.limit || 10);
+
+  let skip: number = 0;
+
+  if (payload?.page) {
+    const page: number = Number(payload?.page || 1);
+    skip = Number((page - 1) * limit);
+  }
+
+  const skipedQuery = searchedMovies.skip(skip);
+
+  const limitQuery = skipedQuery.limit(limit);
+
+  // {page:1, limit:5, sortBy: "-"}
+
+  // sorting
+
+  let sortBy = "-releaseDate";
+
+  if (payload?.sortBy) {
+    sortBy = payload.sortBy as string;
+  }
+
+  const sortQuery = limitQuery.sort(sortBy);
+
+  // field filtering
+  // {fields: a,b,c}
+
+  let fields = " ";
+
+  if (payload.fields) {
+    fields = (payload?.fields as string).split(",").join(" ");
+  }
+
+  const fieldQuery = sortQuery.select(fields);
+
+  // cpoied from payload object
+  const queryObj = { ...payload };
+  const excludeFields = ["searchTerm", "page", "limit", "sortBy", "fields"];
+
+  excludeFields.forEach((e) => delete queryObj[e]);
+
+  const result = await fieldQuery.find(queryObj);
+
   return result;
 };
 
