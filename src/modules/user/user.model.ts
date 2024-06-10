@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { USER_Role, USER_STATUS } from "./user.constants";
 import { TUser } from "./user.interface";
 import { model, Schema } from "mongoose";
